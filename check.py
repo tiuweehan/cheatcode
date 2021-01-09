@@ -29,7 +29,7 @@ def check(config_file: str, submissions_file: Optional[str]=None):
 		try:
 			check_outcomes.append(check_submission(submission, hackathon_config))
 		except:
-			break
+			continue
 
 	with open('results.tsv', 'w+') as output_file:
 		dict_writer = csv.DictWriter(output_file, check_outcomes[0].keys())

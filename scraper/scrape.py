@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-devpost_link = "https://hacknroll2020.devpost.com"
+devpost_link = "https://hacknroll2021.devpost.com"
 
 
 def get_all_entries(devpost_hackathon_link:str):
@@ -60,12 +60,15 @@ def collate_submissions(devpost_hackathon_link: str, out_file: str):
     with open(out_file, "w+") as submissions_out_file:
         submissions_out_file.write("devpost_url\trepo_url\tauthors\n")
 
-        for i, submission_link in enumerate(submission_links[:5]):
-            print(f"Processing entry {i + 1} of {len(submission_links)}")
-            github_link = get_github_link_from_devpost_entry_page(submission_link)
-            team_devpost_links = get_team_devpost_links_from_entry_page(submission_link)
-            team_github_links = list(filter(None, [get_github_link_from_devpost_user_page(link) for link in team_devpost_links]))
-            team_github_usernames = ",".join([link.split("github.com/")[1].rstrip("/") for link in team_github_links])
-            submissions_out_file.write(f"{submission_link}\t{github_link}\t{team_github_usernames}\n")
+        for i, submission_link in enumerate(submission_links[:]):
+            try:
+                print(f"Processing entry {i + 1} of {len(submission_links)}")
+                github_link = get_github_link_from_devpost_entry_page(submission_link)
+                team_devpost_links = get_team_devpost_links_from_entry_page(submission_link)
+                team_github_links = list(filter(None, [get_github_link_from_devpost_user_page(link) for link in team_devpost_links]))
+                team_github_usernames = ",".join([link.split("github.com/")[1].rstrip("/") for link in team_github_links])
+                submissions_out_file.write(f"{submission_link}\t{github_link}\t{team_github_usernames}\n")
+            except:
+                continue
 
 # collate_submissions(devpost_link, "random.tsv")
